@@ -1,5 +1,11 @@
 # Usage
 
+Solves:
+
+* [CWE-256: Unprotected Storage of Credentials](https://cwe.mitre.org/data/definitions/256.html)
+* [Top 10-2017 A2-Broken Authentication](https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication)
+
+
 ## Initial setup
 * Generate encryption key and save it to file as following
 ```shell script
@@ -14,7 +20,7 @@ DEFUSE_KEY_FILE=/etc/defuse-key.asc
 
 * Encrypt user name with stored encryption key (command will ask for input)
 ```shell script
-php ./bin/console lead:encrypt:string 
+php ./bin/console lead:encrypt:string
 ```
 
 The output will be like:
