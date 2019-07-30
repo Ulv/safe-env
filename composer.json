@@ -1,0 +1,13 @@
+{
+  "name": "lead/safe-env",
+  "description": "Bundle for process encrypted credentials",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "require": {
+    "defuse/php-encryption": "^2.2.0"
+  }
+  ,
+  "require-dev": {
+    "roave/security-advisories": "dev-master"
+  }
+}

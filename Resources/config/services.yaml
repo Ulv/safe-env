@@ -1,0 +1,45 @@
+parameters:
+  # Encryption key. File must be placed outside of webroot
+  env(DEFUSE_KEY_FILE): '/etc/defuse-key.asc'
+  key_path: '%env(DEFUSE_KEY_FILE)%'
+
+services:
+  # env processor
+  app.lead.encrypted_credentials_env_processor:
+    class: App\Lead\SafeEnvBundle\Processor\EncryptedDSNEnvProcessor
+    arguments:
+      - '@app.lead.env_processor'
+      - '@app.lead.encryptor'
+      - '@app.lead.decryptor'
+    tags:
+      - {"name": "container.env_var_processor"}
+
+  app.lead.env_processor:
+    autowire: true
+    class: Symfony\Component\DependencyInjection\EnvVarProcessor
+
+  # Encryption
+  app.lead.encryptor:
+    class: App\Lead\SafeEnvBundle\Encryptor\Encryptor
+    arguments:
+      - '@app.lead.file_key_provider'
+
+  # Decryption
+  app.lead.decryptor:
+    class: App\Lead\SafeEnvBundle\Decryptor\Decryptor
+    arguments:
+      - '@app.lead.file_key_provider'
+
+  # Key provider
+  app.lead.file_key_provider:
+    class: App\Lead\SafeEnvBundle\DataProvider\FileKeyDataProvider
+    arguments:
+      $filename: '%key_path%'
+
+  # Console commands
+  app.lead.command.encrypt_string_command:
+    class: App\Lead\SafeEnvBundle\Command\EncryptStringCommand
+    calls:
+      - [setEncryptor, ['@app.lead.encryptor']]
+    tags:
+      - { name: console.command }
